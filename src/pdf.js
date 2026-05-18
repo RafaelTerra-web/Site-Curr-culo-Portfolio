@@ -36,6 +36,41 @@ export function createResumePdf(profile) {
     y += 7
   }
 
+  function addWrappedText(text, x, width, options = {}) {
+    const {
+      size = 8.5,
+      color = BODY,
+      style = 'normal',
+      leading = 3.2,
+      maxLines,
+    } = options
+
+    doc.setFont('helvetica', style)
+    doc.setFontSize(size)
+    doc.setTextColor(...color)
+    const lines = doc.splitTextToSize(text, width)
+    const visibleLines = maxLines ? lines.slice(0, maxLines) : lines
+    visibleLines.forEach((line) => {
+      doc.text(line, x, y)
+      y += leading
+    })
+    return visibleLines.length
+  }
+
+  function addBullet(text, x, width, options = {}) {
+    const oldY = y
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(options.size || 8.3)
+    doc.setTextColor(...(options.color || BODY))
+    doc.text('•', x, y)
+    const lines = doc.splitTextToSize(text, width - 4)
+    lines.forEach((line, index) => {
+      doc.text(line, x + 4, index === 0 ? oldY : y)
+      if (index < lines.length - 1) y += options.leading || 3.15
+    })
+    y += (options.leading || 3.15) + 1.1
+  }
+
   // =======================
   //  HEADER
   // =======================
@@ -84,79 +119,57 @@ export function createResumePdf(profile) {
   y += 6
 
   // =======================
-  //  FORMAÇÃO + EXPERIÊNCIA (side by side)
+  //  FORMAÇÃO
   // =======================
-  sectionBar('Formação & Experiência')
+  sectionBar('Formação')
+  const eduColGap = 7
+  const eduColW = (CW - eduColGap) / 2
+  const eduY = y
+  profile.education.forEach((e, index) => {
+    const x = M + index * (eduColW + eduColGap)
+    const startY = eduY
+    y = startY
 
-  const split = M + CW * 0.42 // left col ~42%
-  const leftW = split - M
-  const rightW = W - split - M + 2
-  let yL = y, yR = y
+    addWrappedText(e.title, x, eduColW, { size: 9.2, color: DARK, style: 'bold', leading: 3.4 })
+    addWrappedText(e.institution, x, eduColW, { size: 8, color: MUTE, leading: 3 })
+    addWrappedText(e.description, x, eduColW, { size: 8, color: BODY, leading: 3, maxLines: 3 })
 
-  // --- Left: Education ---
-  profile.education.forEach((e) => {
-    doc.setFont('helvetica', 'bold')
-    doc.setFontSize(9.5)
-    doc.setTextColor(...DARK)
-    const tLines = doc.splitTextToSize(e.title, leftW - 2)
-    tLines.forEach((l) => { doc.text(l, M + 1, yL); yL += 3.5 })
-
-    doc.setFont('helvetica', 'normal')
-    doc.setFontSize(8.5)
-    doc.setTextColor(...MUTE)
-    const iLines = doc.splitTextToSize(e.institution, leftW - 2)
-    iLines.forEach((l) => { doc.text(l, M + 1, yL); yL += 3.2 })
-
-    doc.setFontSize(8.5)
-    doc.setTextColor(...BODY)
-    const dLines = doc.splitTextToSize(e.description, leftW - 2)
-    dLines.forEach((l) => { doc.text(l, M + 1, yL); yL += 3.2 })
-
-    // tags
     if (e.tags && e.tags.length) {
-      doc.setFont('helvetica', 'italic')
-      doc.setFontSize(8)
-      doc.setTextColor(...MUTE)
-      doc.text(`[${e.tags.join(' • ')}]`, M + 1, yL)
-      yL += 5
-    } else {
-      yL += 4
+      addWrappedText(`[${e.tags.join(' • ')}]`, x, eduColW, { size: 7.8, color: MUTE, style: 'italic', leading: 3, maxLines: 1 })
     }
   })
+  y = eduY + 27
 
-  // --- Right: Experience ---
+  // =======================
+  //  EXPERIÊNCIA
+  // =======================
+  sectionBar('Experiência Profissional')
   profile.experience.forEach((exp) => {
-    doc.setFont('helvetica', 'bold')
-    doc.setFontSize(9.5)
-    doc.setTextColor(...DARK)
-    const tLines = doc.splitTextToSize(exp.title, rightW - 2)
-    tLines.forEach((l) => { doc.text(l, split + 2, yR); yR += 3.5 })
+    addWrappedText(exp.title, M, CW, { size: 9.6, color: DARK, style: 'bold', leading: 3.6 })
+    addWrappedText(exp.company, M, CW, { size: 8.2, color: MUTE, leading: 3 })
+    addWrappedText(exp.description, M, CW, { size: 8.4, color: BODY, leading: 3.1, maxLines: 2 })
+    y += 1
 
-    doc.setFont('helvetica', 'normal')
-    doc.setFontSize(8.5)
-    doc.setTextColor(...MUTE)
-    const cLines = doc.splitTextToSize(exp.company, rightW - 2)
-    cLines.forEach((l) => { doc.text(l, split + 2, yR); yR += 3.2 })
+    const bulletGap = 7
+    const bulletW = (CW - bulletGap) / 2
+    const leftBullets = exp.responsibilities.slice(0, 3)
+    const rightBullets = exp.responsibilities.slice(3, 6)
+    const bulletStartY = y
+    let yLeft = bulletStartY
+    let yRight = bulletStartY
 
-    // description
-    if (exp.description) {
-      doc.setFontSize(8.5)
-      doc.setTextColor(...BODY)
-      const descLines = doc.splitTextToSize(exp.description, rightW - 4)
-      descLines.forEach((l) => { doc.text(l, split + 2, yR); yR += 3.2 })
-      yR += 1.5
-    }
-
-    doc.setFontSize(8.5)
-    doc.setTextColor(...BODY)
-    exp.responsibilities.slice(0, 6).forEach((r) => {
-      const bLines = doc.splitTextToSize(`• ${r}`, rightW - 4)
-      bLines.forEach((l) => { doc.text(l, split + 2, yR); yR += 3.2 })
+    leftBullets.forEach((item) => {
+      y = yLeft
+      addBullet(item, M, bulletW, { size: 8, leading: 2.9 })
+      yLeft = y
     })
-    yR += 4
+    rightBullets.forEach((item) => {
+      y = yRight
+      addBullet(item, M + bulletW + bulletGap, bulletW, { size: 8, leading: 2.9 })
+      yRight = y
+    })
+    y = Math.max(yLeft, yRight) + 3
   })
-
-  y = Math.max(yL, yR) + 5
 
   // =======================
   //  HABILIDADES
@@ -210,22 +223,24 @@ export function createResumePdf(profile) {
 
   profile.projects.forEach((p, idx) => {
     doc.setFont('helvetica', 'bold')
-    doc.setFontSize(9.5)
+    doc.setFontSize(9)
     doc.setTextColor(...DARK)
     const tLines = doc.splitTextToSize(p.title, CW - 2)
-    tLines.forEach((l) => { doc.text(l, M, y); y += 3.5 })
+    tLines.forEach((l) => { doc.text(l, M, y); y += 3.2 })
 
     doc.setFont('helvetica', 'normal')
-    doc.setFontSize(8.5)
+    doc.setFontSize(8)
     doc.setTextColor(...BODY)
-    const dLines = doc.splitTextToSize(p.description, CW - 2)
-    dLines.forEach((l) => { doc.text(l, M + 1, y); y += 3.2 })
+    const projectText = p.impact || p.description
+    const dLines = doc.splitTextToSize(projectText, CW - 2)
+    dLines.slice(0, 2).forEach((l) => { doc.text(l, M + 1, y); y += 3 })
 
     doc.setFont('helvetica', 'italic')
-    doc.setFontSize(8)
+    doc.setFontSize(7.6)
     doc.setTextColor(...MUTE)
-    doc.text(`[${p.tags.join(' • ')}]`, M + 1, y)
-    y += 5
+    const projectMeta = [p.metric, p.role, p.tags.join(' • ')].filter(Boolean).join(' | ')
+    doc.text(`[${projectMeta}]`, M + 1, y)
+    y += 4.4
 
     if (idx < profile.projects.length - 1) {
       // thin separator between projects

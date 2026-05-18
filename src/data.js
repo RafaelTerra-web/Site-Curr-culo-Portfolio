@@ -38,17 +38,17 @@ export const profile = {
 
   experience: [
     {
-      title: 'Técnico em Estradas',
-      company: 'Atuação Profissional',
+      title: 'Técnico em Estradas & Analista de Projetos',
+      company: 'Atuação Profissional em Projetos de Infraestrutura',
       description:
-        'Atuação na área de infraestrutura viária, com responsabilidade sobre atividades de projeto, execução e acompanhamento de obras de engenharia civil relacionadas a estradas e vias urbanas.',
+        'Atuação em projetos de infraestrutura e instalações, combinando leitura técnica, concepção de soluções e análise crítica de documentação para elevar a qualidade das entregas ao cliente.',
       responsibilities: [
-        'Elaboração e acompanhamento de projetos de pavimentação e drenagem',
-        'Execução e interpretação de levantamentos topográficos',
-        'Controle de qualidade de materiais e processos construtivos',
-        'Documentação técnica, memorial descritivo e medições',
-        'Apoio em planejamento e cronograma de obras',
-        'Aplicação de tecnologias BIM em modelos de projeto',
+        'Participação na concepção de projetos de iluminação para a Alameda, contribuindo com soluções técnicas, organização de escopo e refinamento visual da proposta',
+        'Participação em projetos de telecomunicação no Condomínio Acqua, apoiando a estruturação técnica e a compatibilização das entregas',
+        'Apoio em outros projetos envolvendo concepção, criatividade aplicada e desenvolvimento de alternativas para atender requisitos técnicos e operacionais',
+        'Atuação como analista na revisão de documentos, desenhos e informações de projeto antes da emissão ao cliente',
+        'Verificação de consistência, padronização e qualidade técnica dos materiais emitidos',
+        'Interface entre demandas técnicas, documentação e controle de qualidade para reduzir retrabalho e fortalecer a confiabilidade das entregas',
       ],
     },
   ],
