@@ -12,6 +12,12 @@ export const profile = {
   linkedin: 'https://www.linkedin.com/in/rafael-terra-343a68376/',
   phone: '+5521993616495',
 
+  stats: [
+    { value: '4', label: 'frentes de projeto', detail: 'infraestrutura, BIM, web e automação' },
+    { value: '8+', label: 'ferramentas técnicas', detail: 'campo, projeto e desenvolvimento' },
+    { value: '80%', label: 'ganho em rotina digital', detail: 'referência em pipeline ETL' },
+  ],
+
   education: [
     {
       title: 'Bacharelado em Engenharia Civil',
@@ -109,6 +115,10 @@ export const profile = {
   projects: [
     {
       title: 'Projeto de Pavimentação Asfáltica',
+      category: 'Engenharia',
+      role: 'Projeto técnico e documentação',
+      impact: 'Base completa para dimensionamento, especificação e memorial de cálculo.',
+      metric: 'Projeto completo',
       description:
         'Desenvolvimento de projeto técnico completo para pavimentação asfáltica, incluindo dimensionamento de camadas, especificação de materiais e memorial de cálculo estrutural.',
       tags: ['Asfalto', 'Dimensionamento', 'Memorial'],
@@ -116,6 +126,10 @@ export const profile = {
     },
     {
       title: 'Sistema de Drenagem Viária',
+      category: 'Engenharia',
+      role: 'Dimensionamento hidráulico',
+      impact: 'Organiza o escoamento superficial e subterrâneo com aderência a normas técnicas.',
+      metric: 'Conformidade técnica',
       description:
         'Projeto de sistema de drenagem superficial e subterrânea para via urbana, com dimensionamento de bueiros, sarjetas e redes de escoamento, em conformidade com normas técnicas vigentes.',
       tags: ['Drenagem', 'Hidráulica', 'Normas'],
@@ -123,6 +137,10 @@ export const profile = {
     },
     {
       title: 'Plataforma Financeira — Web App',
+      category: 'Web & Dados',
+      role: 'Frontend, API e modelagem de dados',
+      impact: 'Transforma dados financeiros em leitura visual com filtros, categorias e relatórios.',
+      metric: 'Dashboard interativo',
       description:
         'Desenvolvimento de uma aplicação web para controle financeiro pessoal, com dashboard interativo, categorização automática de transações e relatórios em gráficos dinâmicos. Stack: React, Node.js, SQLite.',
       tags: ['React', 'Node.js', 'SQLite'],
@@ -130,6 +148,10 @@ export const profile = {
     },
     {
       title: 'Automação de Fluxo de Trabalho — ETL Pipeline',
+      category: 'Automação',
+      role: 'Pipeline, integração e processamento',
+      impact: 'Reduz etapas manuais ao conectar coleta, transformação e carga de dados internos.',
+      metric: '80% menos manual',
       description:
         'Criação de pipeline ETL para automação de coleta, transformação e carregamento de dados entre sistemas internos, reduzindo o tempo de processamento manual em 80%. Stack: Python, FastAPI, PostgreSQL.',
       tags: ['Python', 'FastAPI', 'PostgreSQL'],

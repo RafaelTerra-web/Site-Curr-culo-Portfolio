@@ -38,6 +38,17 @@ export default function Hero() {
             Baixar PDF
           </button>
         </div>
+        {profile.stats && profile.stats.length > 0 && (
+          <div className="hero__stats" aria-label="Resumo de impacto profissional">
+            {profile.stats.map((stat) => (
+              <div className="hero__stat" key={stat.label}>
+                <strong>{stat.value}</strong>
+                <span>{stat.label}</span>
+                <small>{stat.detail}</small>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <div className="hero__fade" />
     </section>
