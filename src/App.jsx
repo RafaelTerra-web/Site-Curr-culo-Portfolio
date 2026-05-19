@@ -234,7 +234,7 @@ export default function App() {
       <footer className="footer">
         <div className="container">
           <p className="footer__text">
-            &copy; {new Date().getFullYear()} Rafael Terra — Engenheiro Civil &amp; Desenvolvedor
+            &copy; {new Date().getFullYear()} Rafael Terra — Técnico em Estradas &amp; Desenvolvedor
           </p>
         </div>
       </footer>
